@@ -8,7 +8,7 @@ from excel_generator import ExcelGenerator
 
 
 def init_database() -> Database:
-    """Инициализирует базу данных тестовыми данными."""
+    """Инициализирует базу данных тестовыми данными"""
     db = Database()
 
     # Улицы
