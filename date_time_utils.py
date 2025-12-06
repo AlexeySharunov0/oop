@@ -4,7 +4,7 @@ from datetime import date
 
 
 class DateTimeHandler:
-    """Класс для работы с датой и временем."""
+    """Класс для работы с датой и временем"""
 
     @staticmethod
     def get_current_date() -> date:

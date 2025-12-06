@@ -5,7 +5,7 @@ from models import Street, PersonalAccount, Service, Charge
 
 
 class Database:
-    """База данных."""
+    """База данных"""
 
     def __init__(self):
         self._streets: Dict[int, Street] = {}

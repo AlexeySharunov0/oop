@@ -76,7 +76,7 @@ class ExcelGenerator:
 
         # Итого
         ws.merge_cells(f'A{row}:D{row}')
-        ws[f'A{row}'].value = "ИТОГО К ОПЛАТЕ:"
+        ws[f'A{row}'].value = "ИТОГО К ОПЛАТЕ"
         ws[f'A{row}'].font = Font(bold=True, size=12)
         ws[f'A{row}'].alignment = Alignment(horizontal='right', vertical='center')
         ws[f'A{row}'].border = border

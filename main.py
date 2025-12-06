@@ -63,7 +63,7 @@ def init_database() -> Database:
         Service(2, "Горячее водоснабжение", 180.30),
         Service(3, "Электроэнергия", 4.65),
         Service(4, "Отопление", 2200.00),
-        Service(5, "Газоснабжение", 6.40),
+        Service(5, "Газоснажение", 6.40),
     ]
     for service in services:
         db.add_service(service)

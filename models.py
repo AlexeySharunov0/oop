@@ -1,4 +1,4 @@
-"""Модуль с классами для работы с базой данных."""
+"""Модуль с классами для работ с базой данных."""
 
 from dataclasses import dataclass
 from typing import Optional, List, Tuple

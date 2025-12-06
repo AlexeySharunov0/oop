@@ -53,7 +53,7 @@ class DiscountChargeHandler(ChargeHandler):
 
 
 class StandardChargeHandler(ChargeHandler):
-    """Стандартный расчет."""
+    """Стандартный расчет"""
 
     def handle(self, charge: Charge, service: Service) -> Optional[float]:
         return service.calculate_cost(charge.quantity)
