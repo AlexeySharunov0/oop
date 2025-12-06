@@ -7,8 +7,50 @@ from chain_of_responsibility import ChargeProcessor
 from excel_generator import ExcelGenerator
 
 
+class PaymentNoticeService:
+    """Сервис для создания извещений."""
+
+    def __init__(self, db: Database, processor: ChargeProcessor, generator: ExcelGenerator):
+        self._db = db
+        self._processor = processor
+        self._generator = generator
+
+    def generate_for_account(self, account_code: int, period_month: int, period_year: int) -> None:
+        """Генерирует извещение для лицевого счёта."""
+        try:
+            notice = self._create_notice(account_code, period_month, period_year)
+            notice = self._processor.process_notice(notice)
+            file_path = f"извещение_ЛС_{notice.account.account_number}.xlsx"
+            self._generator.generate_payment_notice(notice, file_path)
+            print(f"✓ ЛС {notice.account.account_number}: {notice.total_amount:.2f} руб. → {file_path}")
+        except ValueError as e:
+            print(f"✗ Ошибка для ЛС {account_code}: {e}")
+
+    def _create_notice(self, account_code: int, period_month: int, period_year: int) -> PaymentNotice:
+        """Создаёт извещение на основе данных."""
+        account = self._db.get_account(account_code)
+        if not account:
+            raise ValueError(f"Лицевой счет {account_code} не найден")
+
+        street = self._db.get_street(account.street_code)
+        if not street:
+            raise ValueError(f"Улица {account.street_code} не найдена")
+
+        charges = self._db.get_charges_by_account(account_code)
+        charge_service_pairs = [
+            (c, self._db.get_service(c.service_code))
+            for c in charges
+            if self._db.get_service(c.service_code)
+        ]
+
+        if not charge_service_pairs:
+            raise ValueError(f"Начисления для ЛС {account_code} не найдены")
+
+        return PaymentNotice(account, street, charge_service_pairs, period_month, period_year, 0.0)
+
+
 def init_database() -> Database:
-    """Инициализирует базу данных тестовыми данными"""
+    """Инициализирует базу данных тестовыми данными."""
     db = Database()
 
     # Улицы
@@ -48,46 +90,20 @@ def init_database() -> Database:
     return db
 
 
-def create_payment_notice(db: Database, account_code: int, period_month: int, period_year: int) -> PaymentNotice:
-    """Создает извещение на оплату."""
-    account = db.get_account(account_code)
-    if not account:
-        raise ValueError(f"Лицевой счет {account_code} не найден")
-
-    street = db.get_street(account.street_code)
-    if not street:
-        raise ValueError(f"Улица {account.street_code} не найдена")
-
-    charges = db.get_charges_by_account(account_code)
-    charge_service_pairs = [(c, db.get_service(c.service_code)) for c in charges if db.get_service(c.service_code)]
-
-    if not charge_service_pairs:
-        raise ValueError(f"Начисления для ЛС {account_code} не найдены")
-
-    return PaymentNotice(account, street, charge_service_pairs, period_month, period_year, 0.0)
-
-
 def main():
     """Главная функция."""
     print("Генерация извещений на оплату\n" + "=" * 40)
 
     db = init_database()
     processor = ChargeProcessor()
-    excel_gen = ExcelGenerator()
+    generator = ExcelGenerator()
+    service = PaymentNoticeService(db, processor, generator)
 
     today = date.today()
     period_month, period_year = today.month, today.year
 
-    # Создание извещений для всех счетов
     for account_code in [1, 2, 3]:
-        try:
-            notice = create_payment_notice(db, account_code, period_month, period_year)
-            notice = processor.process_notice(notice)
-            file_path = f"извещение_ЛС_{notice.account.account_number}.xlsx"
-            excel_gen.generate_payment_notice(notice, file_path)
-            print(f"✓ ЛС {notice.account.account_number}: {notice.total_amount:.2f} руб. → {file_path}")
-        except ValueError as e:
-            print(f"✗ Ошибка для ЛС {account_code}: {e}")
+        service.generate_for_account(account_code, period_month, period_year)
 
     print("\n" + "=" * 40)
     print("Готово!")
@@ -95,4 +111,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
