@@ -13,7 +13,7 @@ class DateTimeHandler:
 
     @staticmethod
     def format_date(d: date, fmt: str = "%d.%m.%Y") -> str:
-        """Форматирует дату в строку."""
+        """Форматирует дату в строку"""
         return d.strftime(fmt)
 
     @staticmethod

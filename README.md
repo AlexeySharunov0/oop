@@ -9,7 +9,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## Структура проекта
+## Структура проета
 
 - `main.py` - Главный модуль
 - `models.py` - Модели данных (Street, PersonalAccount, Service, Charge, PaymentNotice)

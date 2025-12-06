@@ -1,4 +1,4 @@
-"""Модуль для работы с базой данных."""
+"""Модуль для работы с базой данных"""
 
 from typing import Optional, Dict, List
 from models import Street, PersonalAccount, Service, Charge

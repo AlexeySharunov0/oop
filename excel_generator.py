@@ -13,7 +13,7 @@ class ExcelGenerator:
         self._date_handler = DateTimeHandler()
 
     def generate_payment_notice(self, notice: PaymentNotice, file_path: str) -> None:
-        """Генерирует Excel-файл с извещением на оплату."""
+        """Генерирует Excel-файл с извещением на оплату"""
         wb = Workbook()
         ws = wb.active
         ws.title = "Извещение на оплату"

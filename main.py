@@ -1,4 +1,4 @@
-"""Главный модуль программы."""
+"""Главный модуль программы"""
 
 from datetime import date
 from database import Database

@@ -60,7 +60,7 @@ class StandardChargeHandler(ChargeHandler):
 
 
 class ChargeProcessor:
-    """Процессор начислений."""
+    """Процессор начислений"""
 
     def __init__(self):
         validation = ValidationChargeHandler()
